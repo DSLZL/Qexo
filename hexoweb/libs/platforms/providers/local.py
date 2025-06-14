@@ -2,6 +2,7 @@ from ..core import Provider
 import os
 import subprocess
 import logging
+from security import safe_command
 
 
 class Local(Provider):
@@ -83,5 +84,5 @@ class Local(Provider):
         else:
             exec_cmd = "cd {} && {}".format(self.path, self.auto)
         logging.info(exec_cmd)
-        p = subprocess.Popen(exec_cmd, shell=True)
+        p = safe_command.run(subprocess.Popen, exec_cmd, shell=True)
         return p
