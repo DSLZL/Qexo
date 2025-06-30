@@ -2,6 +2,7 @@ import requests
 from ..core import Provider
 import base64
 import logging
+from security import safe_requests
 
 
 class GitEa(Provider):
@@ -28,7 +29,7 @@ class GitEa(Provider):
             "Content-Type": "application/json"
         }
         if method == "GET":
-            res = requests.get(url, headers=headers, params=data)
+            res = safe_requests.get(url, headers=headers, params=data)
         elif method == "POST":
             res = requests.post(url, headers=headers, json=data)
         elif method == "PUT":
