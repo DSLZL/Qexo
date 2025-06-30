@@ -9,10 +9,11 @@ import requests
 import logging
 
 from ..core import Provider
+from security import safe_requests
 
 
 def delete(config):
-    response = requests.get(config.get("delete_url"))
+    response = safe_requests.get(config.get("delete_url"))
     return response.text
 
 

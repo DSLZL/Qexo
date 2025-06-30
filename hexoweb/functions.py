@@ -32,6 +32,7 @@ from hexoweb.libs.i18n import get_language
 from .models import Cache, SettingModel, FriendModel, NotificationModel, CustomModel, StatisticUV, StatisticPV, \
     ImageModel, TalkModel, \
     PostModel
+from security import safe_requests
 
 disable_warnings()
 
@@ -424,7 +425,7 @@ def checkBuilding(projectId, token):
     header = dict()
     header["Authorization"] = "Bearer " + token
     header["Content-Type"] = "application/json"
-    response = requests.get(url, headers=header).json()
+    response = safe_requests.get(url, headers=header).json()
     result = response["deployments"]
     for deployment in result:
         if deployment['state'] == "BUILDING" or deployment['state'] == "INITIALIZING":
@@ -517,7 +518,7 @@ def VercelOnekeyUpdate(url):
     # logging.info("download from " + url)
     _tarfile = tmpPath + '/github.tar.gz'
     with open(_tarfile, "wb") as file:
-        file.write(requests.get(url).content)
+        file.write(safe_requests.get(url).content)
     logging.info(gettext("START_EXTRACT_UPDATE"))
     # logging.info("ext files")
     t = tarfile.open(_tarfile)
@@ -570,7 +571,7 @@ def LocalOnekeyUpdate(url):
     os.mkdir(tmpPath)
     _tarfile = tmpPath + '/github.tar.gz'
     with open(_tarfile, "wb") as file:
-        file.write(requests.get(url).content)
+        file.write(safe_requests.get(url).content)
     logging.info(gettext("START_EXTRACT_UPDATE"))
     t = tarfile.open(_tarfile)
     t.extractall(path=tmpPath)
