@@ -31,7 +31,7 @@ def dogecloud_api(access_key, secret_key):
     response = requests.post('https://api.dogecloud.com' + api_path, data=body, headers={
         'Authorization': authorization,
         'Content-Type': mime
-    })
+    }, timeout=60)
     return response.json()
 
 
