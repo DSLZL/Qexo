@@ -310,7 +310,7 @@ def get_latest_version():
             context["status"] = True
             logging.info(gettext("GET_UPDATE_SUCCESS") + ": {} {}".format(latest.tag_name, context["newer_time"]))
         else:
-            latest = requests.get("https://api.github.com/repos/Qexo/Qexo/releases/latest").json()
+            latest = requests.get("https://api.github.com/repos/Qexo/Qexo/releases/latest", timeout=60).json()
             logging.info(gettext("GET_UPDATE_SUCCESS") + ": {}".format(latest["tag_name"]))
             if latest["tag_name"] and (latest["tag_name"] != QEXO_VERSION):
                 context["hasNew"] = True
@@ -423,7 +423,7 @@ def checkBuilding(projectId, token):
     header = dict()
     header["Authorization"] = "Bearer " + token
     header["Content-Type"] = "application/json"
-    response = requests.get(url, headers=header).json()
+    response = requests.get(url, headers=header, timeout=60).json()
     result = response["deployments"]
     for deployment in result:
         if deployment['state'] == "BUILDING" or deployment['state'] == "INITIALIZING":
@@ -491,7 +491,7 @@ def VercelUpdate(appId, token, sourcePath=""):
     if sourcePath == "":
         sourcePath = os.path.abspath("")
     data["files"] = getEachFiles(sourcePath)
-    response = requests.post(url, data=json.dumps(data), headers=header)
+    response = requests.post(url, data=json.dumps(data), headers=header, timeout=60)
     logging.info(gettext("UPDATE_SUCCESS") + ": " + response.text)
     filelist = os.listdir("/tmp")
     logging.info(gettext("START_DEL"))
@@ -516,7 +516,7 @@ def VercelOnekeyUpdate(url):
     # logging.info("download from " + url)
     _tarfile = tmpPath + '/github.tar.gz'
     with open(_tarfile, "wb") as file:
-        file.write(requests.get(url).content)
+        file.write(requests.get(url, timeout=60).content)
     logging.info(gettext("START_EXTRACT_UPDATE"))
     # logging.info("ext files")
     t = tarfile.open(_tarfile)
@@ -569,7 +569,7 @@ def LocalOnekeyUpdate(url):
     os.mkdir(tmpPath)
     _tarfile = tmpPath + '/github.tar.gz'
     with open(_tarfile, "wb") as file:
-        file.write(requests.get(url).content)
+        file.write(requests.get(url, timeout=60).content)
     logging.info(gettext("START_EXTRACT_UPDATE"))
     t = tarfile.open(_tarfile)
     t.extractall(path=tmpPath)

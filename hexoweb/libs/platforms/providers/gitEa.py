@@ -28,13 +28,13 @@ class GitEa(Provider):
             "Content-Type": "application/json"
         }
         if method == "GET":
-            res = requests.get(url, headers=headers, params=data)
+            res = requests.get(url, headers=headers, params=data, timeout=60)
         elif method == "POST":
-            res = requests.post(url, headers=headers, json=data)
+            res = requests.post(url, headers=headers, json=data, timeout=60)
         elif method == "PUT":
-            res = requests.put(url, headers=headers, json=data)
+            res = requests.put(url, headers=headers, json=data, timeout=60)
         elif method == "DELETE":
-            res = requests.delete(url, headers=headers, json=data)
+            res = requests.delete(url, headers=headers, json=data, timeout=60)
         else:
             raise Exception("Method not allowed")
         if not str(res.status_code).startswith("2"):

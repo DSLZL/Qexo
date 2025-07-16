@@ -12,7 +12,7 @@ from ..core import Provider
 
 
 def delete(config):
-    response = requests.get(config.get("delete_url"))
+    response = requests.get(config.get("delete_url"), timeout=60)
     return response.text
 
 
@@ -44,20 +44,20 @@ class Main(Provider):
                 response = requests.post(self.api, data=json.loads(self.custom_body),
                                          headers=json.loads(self.custom_header),
                                          files={self.post_params: [file.name, file.read(),
-                                                                   file.content_type]})
+                                                                   file.content_type]}, timeout=60)
             else:
                 response = requests.post(self.api, data={}, headers=json.loads(self.custom_header),
                                          files={self.post_params: [file.name, file.read(),
-                                                                   file.content_type]})
+                                                                   file.content_type]}, timeout=60)
         else:
             if self.custom_body:
                 response = requests.post(self.api, data=json.loads(self.custom_body),
                                          files={self.post_params: [file.name, file.read(),
-                                                                   file.content_type]})
+                                                                   file.content_type]}, timeout=60)
             else:
                 response = requests.post(self.api, data={},
                                          files={self.post_params: [file.name, file.read(),
-                                                                   file.content_type]})
+                                                                   file.content_type]}, timeout=60)
         data = response.text
         logging.info(data)
         if self.json_path:
