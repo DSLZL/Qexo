@@ -1,4 +1,3 @@
-import random
 import sys
 import uuid
 
@@ -12,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 import hexoweb.libs.image
 from hexoweb.libs.image import get_image_host, delete_image
 from .functions import *
+import secrets
 
 
 # 登录验证API api/auth
@@ -160,7 +160,7 @@ def set_api(request):
         else:
             if not SettingModel.objects.filter(name="WEBHOOK_APIKEY").count():
                 save_setting("WEBHOOK_APIKEY", ''.join(
-                    random.choice("qwertyuiopasdfghjklzxcvbnm1234567890") for x in range(12)))
+                    secrets.choice("qwertyuiopasdfghjklzxcvbnm1234567890") for x in range(12)))
         save_setting("ALLOW_FRIEND", request.POST.get("allow_friend"))
         save_setting("FRIEND_RECAPTCHA", request.POST.get("friend-recaptcha"))
         save_setting("RECAPTCHA_TOKEN", request.POST.get("recaptcha-token"))
@@ -716,7 +716,7 @@ def create_webhook_config(request):
             if key:
                 url = request.POST.get("uri") + "?token=" + key
             else:
-                key = ''.join(random.choice("qwertyuiopasdfghjklzxcvbnm1234567890") for x in range(12))
+                key = ''.join(secrets.choice("qwertyuiopasdfghjklzxcvbnm1234567890") for x in range(12))
                 save_setting("WEBHOOK_APIKEY", key)
                 url = request.POST.get("uri") + "?token=" + key
             if Provider().delete_hooks():
