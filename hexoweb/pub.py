@@ -1,4 +1,3 @@
-import random
 import uuid
 import sys
 
@@ -9,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .functions import *
 from .models import ImageModel
+import secrets
 
 
 # 保存内容 pub/save
@@ -62,7 +62,7 @@ def create_webhook_config(request):
             if key:
                 url = request.POST.get("uri") + "?token=" + key
             else:
-                key = ''.join(random.choice("qwertyuiopasdfghjklzxcvbnm1234567890") for x in range(12))
+                key = ''.join(secrets.choice("qwertyuiopasdfghjklzxcvbnm1234567890") for x in range(12))
                 save_setting("WEBHOOK_APIKEY", key)
                 url = request.POST.get("uri") + "?token=" + key
             if Provider().delete_hooks():
